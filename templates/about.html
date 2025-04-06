@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Ai Feedback Analyzer 2.0</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Corporate Logo">
+        </div>
+        <h1>Ai Feedback Analyzer 2.0 - About</h1>
+         {# --- Logout Link Section --- #}
+        {% if session.logged_in %}
+            <div style="margin: 0 15px;">
+                 {# Display username from session if needed #}
+                 <span style="color: #6c757d; font-size: 0.9em;">User: {{ session.username | default('Logged In') }}</span> |
+                 <a href="{{ url_for('logout') }}" style="color:#dc3545; text-decoration:none; font-size: 0.9em;">Logout</a>
+            </div>
+        {% endif %}
+        {# --- End Logout Link Section --- #}
+         {# Point search back to index page if user uses it here #}
+         <form action="{{ url_for('index') }}" method="get" class="search-form">
+            <input type="text" name="search" placeholder="Search feedback..." value="">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+     {# Display flashed messages (e.g., login success) - Optional on About page #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages" style="margin-top: 15px;">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category | default('info') }}">{{ message }}</div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+    <div class="about-content" style="padding-top: 20px; line-height: 1.6;">
+        <h2>How It Works</h2>
+        <p>
+            This application provides a web interface to view and analyze user feedback
+            that has been logged to JSONL files stored in an Azure Storage container.
+            Access requires authentication via a local username and password.
+        </p>
+        <p>Here's a summary of the process:</p>
+        <ul>
+            <li><strong>Authentication:</strong> Access to the application is protected by a local username/password system. User login status is managed using Flask sessions.</li>
+            <li><strong>Containerization:</strong> The entire application runs as a Docker container based on an Ubuntu image, ensuring a consistent environment for deployment.</li>
+            <li><strong>Web Framework:</strong> It utilizes Flask, a lightweight Python web framework, to handle web requests and render pages.</li>
+            <li><strong>Azure Connection:</strong> It securely connects to a specific Azure Storage Account container using a Container SAS URL. This URL, which includes permissions and an expiry date, is provided via an environment file (<code>azure.env</code>) for security. The application requires SAS permissions for both <strong>List</strong> (to find files) and <strong>Read</strong> (to download file content).</li>
+            <li><strong>Scheduled Data Fetching:</strong> A background scheduler (APScheduler) runs every 15 minutes within the application. This task scans the configured Azure container, including any subfolders, looking for files that start with <code>feedback_log_</code> and end with <code>.jsonl</code>.</li>
+            <li><strong>Data Processing & Storage:</strong> For each matching file found, the application downloads its content. It reads the file line by line, parsing each line as a JSON object. It extracts key fields like ID, timestamp, user details, feedback type, and content. This extracted data, along with the source Azure file path, is then inserted into a local SQLite database file (<code>feedback.db</code>).</li>
+            <li><strong>Incremental Updates:</strong> To ensure efficiency and avoid duplicates, the application uses an <code>INSERT OR IGNORE</code> database command based on the feedback entry's unique <code>id</code> (which is set as the Primary Key). This means that even though all files are scanned, only feedback entries with IDs not already present in the database are actually added during each 15-minute cycle.</li>
+            <li><strong>Web Interface:</strong> After logging in, the main page queries the SQLite database and displays the collected feedback data in a sortable, searchable table. It uses the Jinja2 templating engine (with Flask) and custom CSS for styling, including the company logo and a modern theme.</li>
+            <li><strong>Features:</strong> Authenticated users can sort the data by clicking on most column headers and can filter the results by typing into the search bar, which checks multiple fields for matches.</li>
+        </ul>
+        <p>The primary technologies involved are Python 3.9+, Flask, Flask-Session, Werkzeug (for hashing), SQLite3, APScheduler, the <code>azure-storage-blob</code> SDK, HTML5, CSS3, Jinja2, Gunicorn (as the web server within Docker), and Docker itself.</p>
+
+        <div class="footer" style="text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+            <a href="{{ url_for('index') }}">Back to Feedback Data</a>
+        </div>
+    </div>
+
+</div> {# End container #}
+
+</body>
+</html>

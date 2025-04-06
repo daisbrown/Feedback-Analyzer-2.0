@@ -1,0 +1,156 @@
+/* General styles */
+body {
+    background-color: #f8f9fa; /* Light grey background */
+    color: #212529; /* Dark text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 14px; /* Slightly smaller base font */
+}
+
+.container {
+    max-width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #ffffff; /* White content background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Header styles */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Pushes title/search apart if needed */
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dee2e6; /* Light border */
+}
+
+.logo img {
+    max-height: 40px; /* Adjust logo size */
+    width: auto;
+    margin-right: 15px; /* Space between logo and title */
+    /* border: 2px solid red; */ /* TEMPORARY BORDER for debugging */
+}
+
+h1 {
+    color: #343a40; /* Dark grey title */
+    margin: 0;
+    font-size: 1.75rem;
+    flex-grow: 1; /* Allow title to take available space */
+}
+
+/* Search form styles */
+.search-form {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; /* Space from title */
+}
+
+.search-form input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px 0 0 4px; /* Rounded left corners */
+    font-size: 0.9rem;
+    min-width: 250px;
+}
+
+.search-form button {
+    padding: 8px 15px;
+    background-color: #007b9c; /* Accent color (Sealed Air Teal-like) */
+    color: white;
+    border: 1px solid #006f8b;
+    border-left: none; /* Remove border between input and button */
+    border-radius: 0 4px 4px 0; /* Rounded right corners */
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.search-form button:hover {
+    background-color: #005f7a; /* Darker teal on hover */
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    font-size: 0.9rem; /* Slightly smaller table font */
+}
+
+th, td {
+    border: 1px solid #dee2e6; /* Lighter borders */
+    padding: 10px 12px; /* Adjust padding */
+    text-align: left;
+    vertical-align: top; /* Align content to top */
+    word-wrap: break-word; /* Wrap long content */
+}
+
+th {
+    background-color: #e9ecef; /* Light grey header background */
+    color: #495057; /* Darker grey header text */
+    font-weight: 600; /* Bolder headers */
+}
+
+th a {
+    color: inherit; /* Inherit header text color */
+    text-decoration: none;
+    display: block;
+}
+
+th a:hover {
+    text-decoration: underline;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa; /* Subtle striping */
+}
+
+tr:hover {
+    background-color: #e9ecef; /* Hover effect */
+}
+
+td {
+    color: #495057;
+}
+
+td:last-child { /* Style for Source File column */
+    font-size: 0.85em;
+    color: #6c757d; /* Dimmer text for file path */
+}
+
+.sort-icon {
+    font-size: 0.8em;
+    margin-left: 5px;
+    color: #007b9c; /* Use accent color for sort icon */
+}
+
+/* Error message */
+.error-message {
+    color: #dc3545; /* Red for errors */
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* --- OPTIONAL FOOTER STYLING --- */
+.footer {
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+.footer a {
+    color: #007b9c;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+/* --- END FOOTER STYLING --- */

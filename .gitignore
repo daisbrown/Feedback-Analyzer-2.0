@@ -1,0 +1,20 @@
+# Secrets and Environment files
+azure.env
+.env
+
+# Database file
+feedback.db
+
+# Flask Session files
+flask_session/
+/flask_session/ # Double ensure
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE / OS specific files (optional but good practice)
+.vscode/
+.idea/
+*.DS_Store

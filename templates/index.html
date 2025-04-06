@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Feedback Analyzer 2.0</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Corporate Logo">
+        </div>
+        <h1>Ai Feedback Analyzer 2.0</h1>
+        {# --- Logout Link Section --- #}
+        {% if session.logged_in %}
+            <div style="margin: 0 15px;">
+                {# Display username from session if needed #}
+                <span style="color: #6c757d; font-size: 0.9em;">User: {{ session.username | default('Logged In') }}</span> |
+                <a href="{{ url_for('logout') }}" style="color:#dc3545; text-decoration:none; font-size: 0.9em;">Logout</a>
+            </div>
+        {% endif %}
+        {# --- End Logout Link Section --- #}
+        <form action="{{ url_for('index') }}" method="get" class="search-form">
+            {# Use search_term from context (passed from app.py) to repopulate search box #}
+            <input type="text" name="search" placeholder="Search feedback..." value="{{ search_term | default('') }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    {# Display flashed messages (e.g., login success) #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages" style="margin-bottom: 15px;">
+            {% for category, message in messages %}
+            {# Use category for styling if defined in CSS, otherwise generic flash #}
+            <div class="flash flash-{{ category | default('info') }}">{{ message }}</div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% if error %}
+        <div class="error-message">Error fetching data: {{ error }}</div>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                {# Helper macro to generate sort links, now includes search term #}
+                {% macro sort_link(column, display_name) %}
+                    {% set current_order = request.args.get('order', 'desc') %}
+                    {% set current_sort = request.args.get('sort_by', 'timestamp') %}
+                    {% set next_order = 'asc' if current_sort == column and current_order == 'desc' else 'desc' %}
+                    {% set search_term_val = request.args.get('search', '') %} {# Get search term for link generation #}
+                    <th>
+                        {# Append search param to sorting links #}
+                        <a href="{{ url_for('index', sort_by=column, order=next_order, search=search_term_val) }}">
+                            {{ display_name }}
+                            {% if current_sort == column %}
+                                <span class="sort-icon">{{ '▲' if current_order == 'asc' else '▼' }}</span>
+                            {% endif %}
+                        </a>
+                    </th>
+                {% endmacro %}
+
+                {{ sort_link('timestamp', 'Timestamp') }}
+                {{ sort_link('id', 'ID') }}
+                {{ sort_link('user_id', 'User ID') }}
+                {{ sort_link('user_email', 'User Email') }}
+                {{ sort_link('session_id', 'Session ID') }}
+                {{ sort_link('feedback_type', 'Feedback Type') }}
+                <th>Content</th> {# Content usually not sorted #}
+                <th>Source File</th> {# Source file usually not sorted #}
+            </tr>
+        </thead>
+        <tbody>
+            {% if feedback_data %}
+                {% for item in feedback_data %}
+                <tr>
+                    <td>{{ item.timestamp }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.user_id }}</td>
+                    <td>{{ item.user_email }}</td>
+                    <td>{{ item.session_id }}</td>
+                    <td>{{ item.feedback_type }}</td>
+                    <td>{{ item.content }}</td>
+                    <td>{{ item.source_blob_path }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center;">
+                        {% if request.args.get('search') %}
+                            No feedback data found matching your search criteria.
+                        {% else %}
+                            No feedback data found or loaded yet.
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {# --- Footer Link to About Page --- #}
+    <div class="footer" style="text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+        <a href="{{ url_for('about') }}">About this Application</a>
+    </div>
+    {# --- End Footer Link --- #}
+
+</div> {# End container #}
+
+</body>
+</html>
