@@ -80,39 +80,3 @@ CMD ["gunicorn", "--bind="admin"
 # Run app.py whenworkers", "1", "app:app"]
 # *** END CHANGE *** the container launches using Gunicorn with a single worker
 CMD ["gunicorn", "--bind", "0.0.0.0:8888
-Use code with caution.
-Dockerfile:
-Step 2: Update Files on Your Ubuntu Server
-
-Use nano or another editor to replace the contents of app.py and", "--workers", "1", "app:app"]
-
---- END CHANGE --- Dockerfile on your server (~/feedback-analyzer/) with the code provided
-**To Save to Git Without Running:**
-
-1.  Replace above.
-
-**Step 3: Check Git Status**
-
-*   Run the contents of your local `app.py` and `Dockerfile` with the `git status` in `~/feedback-analyzer`. You should see:
-    ```
-    On branch master
-    Your branch is up to date with 'origin/master code above.
-2.  Run `git status` - it should show `app'.
-
-    Changes not staged for commit:
-      (use "git add <file.py` and `Dockerfile` as modified.
-3.  Run `>..." to update what will be committed)
-      (use "git restoregit add app.py Dockerfile`
-4.  Run `git commit <file>..." to discard changes in working directory)
-            modified:    -m "feat: Prepare for Azure Web App deployment (persistent sessions, 1 workerDockerfile
-            modified:   app.py
-
-    no changes added to commit ()"`
-5.  Run `git push origin master` (or `main`)
-
-Now the changes are safely committed and pushed to GitHub, but your running containeruse "git add" and/or "git commit -a")
-     on `gblldockersailp01` is still using the previous```
-
-**Step 4: Stage and Commit the Changes**
-
-*   Add version.
